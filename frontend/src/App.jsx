@@ -3,6 +3,9 @@ import Home from "./pages/Home"
 import Auth from "./pages/Auth"
 import PersistLogin from "./components/PersistLogin"
 import Signout from "./pages/Signout"
+import RequireAuth from "./components/RequireAuth"
+import Result from "./pages/Result"
+import EditForm from "./pages/EditForm"
 
 function App() {
 
@@ -14,6 +17,12 @@ function App() {
 
         <Route element={<PersistLogin />}>
           <Route path="/" element={<Home />} />
+
+          <Route element={<RequireAuth requireAdmin={false} />}>
+            <Route path="/form/new" element={<EditForm newForm={true} />} />
+            <Route path="/form/:formId/edit" element={<EditForm newForm={false} />} />
+            <Route path="/form/:formId/result" element={<Result />} />
+          </Route>            
 
         </Route>        
       </Routes>
