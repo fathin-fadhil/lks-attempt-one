@@ -19,6 +19,8 @@ import {
     InboxArrowDownIcon,
     LifebuoyIcon,
     PowerIcon,
+    UserGroupIcon,
+    DocumentChartBarIcon
   } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
@@ -63,7 +65,7 @@ export default function NavbarComp() {
           Home
         </a>
       </Typography>
-      <Typography
+      {/* <Typography
         as="li"
         variant="small"
         color="blue-gray"
@@ -92,7 +94,7 @@ export default function NavbarComp() {
         <a href="#" className="flex items-center">
           Docs
         </a>
-      </Typography>
+      </Typography> */}
     </ul>
   );
  
@@ -114,7 +116,7 @@ export default function NavbarComp() {
               size="sm"
               className="hidden lg:inline-block"
             >
-              <span>Buy Now</span>
+              <span>Dashboard</span>
             </Button>
             <IconButton
               variant="text"
@@ -175,35 +177,48 @@ function ProfileMenu() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const closeMenu = () => setIsMenuOpen(false);
     const navigate = useNavigate();
+    const { auth } = useAuth()
+    const [greetings, setGreetings] = useState('Hello,');
+    const [userName, setUserName] = useState('')
+
+    const goToAdminPage = () => {
+      navigate('/admin')
+    }
+
+    useEffect(() => {
+      var curHr = new Date().getHours()
+      if (curHr < 12) {
+        setGreetings('Good Morning, ')
+      } else if (curHr < 18) {
+        setGreetings('Good Afternoon, ')
+      } else {
+        setGreetings('Good Evening, ')
+      } 
+
+      setUserName(auth?.name)
+    })
 
 
     const profileMenuItems = [
         {
-          label: "My Profile",
-          icon: UserCircleIcon,
+          label: "Kuesioner Ku",
+          icon: DocumentChartBarIcon,
           link:'/userprofile'
-        },
-        {
-          label: "Edit Profile",
-          icon: Cog6ToothIcon,
-          link:'/'
-        },
-        {
-          label: "Inbox",
-          icon: InboxArrowDownIcon,
-          link:'/'
-        },
-        {
-          label: "Help",
-          icon: LifebuoyIcon,
-          link:'/'
-        },
+        },        
         {
           label: "Sign Out",
           icon: PowerIcon,
           link:'/signout'
         },
       ];
+
+      if (auth?.isAdmin ) {
+        profileMenuItems.splice(profileMenuItems.length - 1, 0, {
+          label: 'Admin Page',
+          icon: UserGroupIcon ,
+          onclick: goToAdminPage
+        })
+      }
    
     return (
       <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -230,6 +245,14 @@ function ProfileMenu() {
           </Button>
         </MenuHandler>
         <MenuList className="p-1">
+          <MenuItem>
+              <Typography variant='small' >
+                {greetings}
+              </Typography>
+              <Typography variant='small' >
+                {userName}
+              </Typography>
+          </MenuItem>
           {profileMenuItems.map(({ label, icon,  link }, key) => {
             const isLastItem = key === profileMenuItems.length - 1;
             return (
