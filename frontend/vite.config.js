@@ -11,6 +11,7 @@ export default defineConfig({
       '/token': 'http://localhost:3000',
       '/logout': 'http://localhost:3000',
       '/api': 'http://localhost:3000',
+      '/resources': 'http://localhost:3000'
     }
   }
 })

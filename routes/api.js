@@ -7,14 +7,14 @@ router.get('/forms', async (req, res) => {
     const {searchQuery, page, size } = req.query
 
     const search = searchQuery || ''
-    const pageNumber = page || 0
-    const pageSize = size || 10
+    const pageNumber = Number(page) || 0
+    const pageSize = Number(size) || 10
 
     const limit = pageSize
     const offset = pageNumber * pageSize
 
     try {
-        const { count, row } = await getFormsDetails(search, limit, offset)
+        const { count, rows } = await getFormsDetails(search, limit, offset)
         const totalItems = count 
 
         const totalPages = Math.ceil(totalItems / pageSize)
@@ -24,7 +24,7 @@ router.get('/forms', async (req, res) => {
             totalPages,
             currentPage: pageNumber,
             pageSize,
-            formsArray: row
+            formsArray: rows
         })
 
     } catch (error) {
