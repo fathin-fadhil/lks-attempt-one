@@ -65,36 +65,18 @@ export default function NavbarComp() {
           Home
         </a>
       </Typography>
-      {/* <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Account
-        </a>
-      </Typography>
+
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" className="flex items-center">
-          Blocks
+        <a href="#" onClick={() => {navigate('/')}} className="flex items-center">
+          Dashboard
         </a>
       </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Docs
-        </a>
-      </Typography> */}
+      
     </ul>
   );
  
@@ -109,15 +91,18 @@ export default function NavbarComp() {
           >
             Material Tailwind
           </Typography>
+
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
+
             <Button
               variant="gradient"
               size="sm"
               className="hidden lg:inline-block"
             >
-              <span>Dashboard</span>
+              <span>Buat kuis</span>
             </Button>
+
             <IconButton
               variant="text"
               className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -164,7 +149,7 @@ export default function NavbarComp() {
         <Collapse open={openNav}>
           {navList}
           <Button variant="gradient" size="sm" fullWidth className="mb-2">
-            <span>Buy Now</span>
+            <span>Buat Kuis</span>
           </Button>
         </Collapse>
       </Navbar>
