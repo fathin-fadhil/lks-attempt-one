@@ -3,8 +3,8 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import useAuth from "../hooks/useAuth"
 import { useEffect, useState } from "react"
-import { Button, Card, CardBody, CardFooter, Tooltip, Typography, Dialog, DialogBody, Spinner, Navbar } from "@material-tailwind/react"
-import { TrashIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { Button, Card, CardBody, CardFooter, Tooltip, Typography, Dialog, DialogBody, Spinner } from "@material-tailwind/react"
+import { TrashIcon, ExclamationTriangleIcon, CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { TbAsteriskSimple } from "react-icons/tb";
 import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion"
 import CheckboxQuestion from "../components/CheckboxQuestion"
@@ -29,6 +29,8 @@ function Form() {
   const [isSuccess, setIsSuccess] = useState(null)
   const [isWarn, setIsWarn] = useState(null)
   const [isDeleteWarning, setIsDeleteWarning] = useState(false)
+  const [shareLinkDialog, setShareLinkDialog] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
 
   useEffect(() => {
     const getForm = async () => {
@@ -146,6 +148,7 @@ function Form() {
                 <div className=" mt-4 flex gap-3">
                   <Button onClick={() => {navigate(`/form/${formId}/edit`)}} variant="outlined" size="sm" color={formData.formColor}>Edit Form</Button>
                   <Button onClick={() => {navigate(`/form/${formId}/result`)}} variant="outlined" size="sm" color={formData.formColor}>Lihat Hasil</Button>
+                  <Button onClick={() => {setShareLinkDialog(true)}} variant="gradient" size="sm" color={formData.formColor}>Bagikan Form</Button>
                   <Button onClick={() => {setIsWarn(true);setIsDeleteWarning(true); setDialogOpen(true); setDialogMessage('Apakah anda yakin ingin menghapus form ini?')}} variant="text" color="red" size="sm" className=" inline-flex gap-1 align-middle text-center text-red-900 ml-auto" >
                     <TrashIcon className=" h-4 w-4" />  Delete
                   </Button>
@@ -205,6 +208,20 @@ function Form() {
                 </div>
               }
             </DialogBody>      
+          </Dialog>
+
+          <Dialog open={shareLinkDialog} className=" w-full max-w-lg md:max-w-2xl -m-4">
+              <DialogBody className=" flex flex-col items-center gap-3">
+                  <Typography className=" text-black text-xl text-center">Tautan Kuesioner</Typography>
+                  <div className=" bg-blue-gray-50 w-fit rounded-md inline-flex gap-2 align-middle items-center pl-4">                    
+                    <Typography className=" text-center">{window.location.href}</Typography>                  
+                    <div onClick={() => {navigator.clipboard.writeText(window.location.href); setLinkCopied(true)}} className="  py-3 rounded-md flex align-middle items-center bg-blue-gray-50 border-l-2 border hover:bg-blue-gray-100 cursor-pointer mx-auto w-10 h-full justify-center">
+                      <DocumentDuplicateIcon className=" h-6 w-6"/>
+                    </div>
+                  </div>
+                  <Typography className={` ${linkCopied? '': 'hidden'}`} >Link Tersalin</Typography>
+                  <Button color={formData.formColor} onClick={() => {setShareLinkDialog(false); setLinkCopied(false)}} >Ok</Button>
+              </DialogBody>
           </Dialog>
 
           <div className=" w-full max-w-5xl flex flex-row justify-end gap-4">
