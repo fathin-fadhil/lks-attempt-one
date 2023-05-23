@@ -1,10 +1,14 @@
-import { Typography } from "@material-tailwind/react"
+import { Card, Typography } from "@material-tailwind/react"
 
 
 function Home() {
   return (
-    <div>
-        <Typography>a</Typography>
+    <div className=" flex flex-col h-full items-center bg-blue-gray-50">
+
+
+      <Card className=" max-w-lg w-full">
+        aaa
+      </Card>
     </div>
   )
 }
