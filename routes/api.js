@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getFormsDetails } from "../controllers/formsController.js";
+import { addForm, getFormsDetails } from "../controllers/formsController.js";
+import { isAuthenticated } from "../middleware/checkAuthentication.js";
 
 const router = Router()
 
@@ -31,7 +32,23 @@ router.get('/forms', async (req, res) => {
         console.log("🚀 ~ file: api.js:31 ~ router.get ~ error:", error)
         res.sendStatus(500)
     }
+})
 
+router.post('/forms', isAuthenticated, async (req, res) => {
+    const { isAnonymous, formTitle, formDescription, formQuestions, formColor } = req.body
+
+    if (isAnonymous === undefined ||  !formTitle  || !formDescription || !formQuestions || !formColor) return res.sendStatus(400)
+
+    try {
+        await addForm({
+            isAnonymous, formTitle, formDescription, formQuestions, formColor
+        }, req.userId, req.email, req.userName)
+
+        res.sendStatus(201)
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:49 ~ router.post ~ error:", error)
+        res.sendStatus(500)
+    }
 })
 
 export default router

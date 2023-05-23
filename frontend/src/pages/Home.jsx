@@ -119,7 +119,7 @@ function Home() {
                       </p>
                     </div>
                     <p className=" mt-auto text-sm">
-                    • {form.createdByUserEmail}
+                    • {form.createdByUserName}
                     </p>
                   </div>
                 )

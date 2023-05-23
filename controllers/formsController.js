@@ -55,7 +55,7 @@ export async function getFormById(formId) {
     return form;
 }
 
-export async function addForm(formData, userId, userEmail) {
+export async function addForm(formData, userId, userEmail, userName) {
     const {isAnonymous, formTitle, formDescription, formColor, formQuestions} = formData
     await FormsModel.create({
         isAnonymous,
@@ -66,7 +66,8 @@ export async function addForm(formData, userId, userEmail) {
             formQuestionsArray: formQuestions
         },
         userId,
-        createdByUserEmail: userEmail
+        createdByUserEmail: userEmail,
+        createdByUserName: userName
     })
 }
 

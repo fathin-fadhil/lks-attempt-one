@@ -6,6 +6,7 @@ import Signout from "./pages/Signout"
 import RequireAuth from "./components/RequireAuth"
 import Result from "./pages/Result"
 import EditForm from "./pages/EditForm"
+import Form from "./pages/Form"
 
 function App() {
 
@@ -17,6 +18,8 @@ function App() {
 
         <Route element={<PersistLogin />}>
           <Route path="/" element={<Home />} />
+
+          <Route path="/form/:formId" element={<Form />} />
 
           <Route element={<RequireAuth requireAdmin={false} />}>
             <Route path="/form/new" element={<EditForm newForm={true} />} />
