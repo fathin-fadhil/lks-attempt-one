@@ -5,18 +5,19 @@ import { useAutoAnimate } from "@formkit/auto-animate/react"
 import useAuth from '../hooks/useAuth'
 import useMoveIndex from '../utils/useMoveIndex'
 import NavbarComp from "../components/NavbarComp"
-import { Card, CardBody, CardFooter, Checkbox, Typography, Input, Button } from "@material-tailwind/react"
+import { Card, CardBody, CardFooter, Checkbox, Typography, Input, Button, Dialog, DialogBody, Spinner } from "@material-tailwind/react"
 import TextArea from 'react-textarea-autosize'
 import MultipleChoiceEdit from "../components/MultipleChoiceEdit"
 import genId from "../utils/genId"
+import CheckboxEdit from "../components/CheckboxEdit"
+import TextInputEdit from "../components/TextInputEdit"
 
 import { HiOutlineChevronUp, HiOutlineChevronDown } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import { BiRadioCircleMarked } from "react-icons/bi";
 import { MdOutlineCheckBox } from "react-icons/md";
 import { BsTextParagraph } from "react-icons/bs";
-import CheckboxEdit from "../components/CheckboxEdit"
-import TextInputEdit from "../components/TextInputEdit"
+import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 
 function EditForm({newForm}) {
@@ -132,6 +133,15 @@ function EditForm({newForm}) {
 
   const handleCancel = () => {
     if (newForm) {
+      navigate('/')
+    }
+  }
+
+  const handleDialogOk = () => {
+    if (isError) {
+      setDialogOpen(false)
+    } 
+    if(isSuccess) {
       navigate('/')
     }
   }
@@ -354,11 +364,25 @@ function EditForm({newForm}) {
               </div>
 
               <div className="flex flex-row -mb-16 gap-4 justify-end">
-                <Button size="sm" onClick={handleCancel} variant="outlined">Cancel</Button>
-                <Button size="sm" onClick={handleSave}>Simpan</Button>
+                <Button color={formDetails.formColor} size="sm" onClick={handleCancel} variant="outlined">Cancel</Button>
+                <Button color={formDetails.formColor} size="sm" onClick={handleSave}>Simpan</Button>
               </div>
           </CardBody>
         </Card>
+
+        <Dialog open={dialogOpen} className="w-full max-w-lg md:max-w-xl -m-4">
+        <DialogBody className=" flex flex-col items-center gap-3">
+          {isLoading && <Spinner className=" w-14 h-14" />}
+
+          {isSuccess &&<CheckCircleIcon className=" text-green-500 w-14 h-14" />}
+          {isError && <ExclamationTriangleIcon className=" text-red-500 w-14 h-14" />}
+          <Typography className=" text-blue-gray-900">{dialogMessage}</Typography>
+
+          {!isLoading && 
+            <Button onClick={()=> {handleDialogOk()}}>OK</Button>                  
+          }
+        </DialogBody>      
+      </Dialog>
 
         <Button onClick={() => {console.log(questionArray); console.log(formDetails); }}>Print form and question</Button>
       </div>
