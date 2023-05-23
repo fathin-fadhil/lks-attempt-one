@@ -138,7 +138,7 @@ function Form() {
 
       <div className={`bg-${formData.formColor}-50 w-full flex flex-col  h-fit min-h-full`}>
         <div className={`bg-${formData.formColor}-50  flex flex-col items-center gap-3 p-4`} ref={parent}>
-          <Card shadow={false} className={` shadow-md w-full max-w-5xl border-t-4 border-${formData.formColor}-500`}>
+          <Card shadow={false} className={` shadow-md w-full max-w-5xl border-b-4 border-${formData.formColor}-500`}>
             <CardBody>
               <Typography variant="h1" >{formData.formTitle}</Typography>
               <Typography variant="p" className=" mb-3 text-black">{formData.formDescription}</Typography>
