@@ -38,7 +38,7 @@ export async function getFormById(formId) {
         return null
     } 
 
-    const {id, formTitle, formDescription, formColor, formQuestions, userId, createdAt, updatedAt, isAnonymous, createdByUserEmail} = formData.dataValues;
+    const {id, formTitle, formDescription, formColor, formQuestions, userId, createdAt, updatedAt, isAnonymous, createdByUserEmail, createdByUserName} = formData.dataValues;
     const form = {
         isAnonymous,
         formId: id,
@@ -49,7 +49,8 @@ export async function getFormById(formId) {
         createdAt,
         updatedAt,
         createdByUserId: userId,
-        createdByUserEmail
+        createdByUserEmail,
+        createdByUserName
     }
     
     return form;

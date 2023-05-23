@@ -72,7 +72,7 @@ function Home() {
           </div>
         </div>
 
-        <Typography variant="h2" className=" mt-4">Telusuri Kuesioner</Typography>
+        <Typography variant="h2" className=" mt-4 mb-1">Telusuri Kuesioner</Typography>
 
         <Card shadow={false} className=" drop-shadow-xl w-full max-w-5xl ">
             <div className=' pt-6 px-6'>

@@ -41,7 +41,8 @@ function EditForm({newForm}) {
   useEffect(() => {
     const getForm = async () => {
       try {
-        const res = await axiosPrivate.get(`/forms/${formId}`)
+        const res = await axiosPrivate.get(`/api/forms/${formId}`)
+        console.log("🚀 ~ file: EditForm.jsx:46 ~ getForm ~ res:", res)
         setFormDetails({
           isAnonymous: res.data.isAnonymous,
           formTitle: res.data.formTitle,
@@ -51,7 +52,11 @@ function EditForm({newForm}) {
           createdByUserName: res.data.createdByUserName
         })
   
-        if (!(res.data.createdByUserId !== auth?.userId || auth?.isAdmin)) {
+        console.log("🚀 ~ file: EditForm.jsx:56 ~ getForm ~ auth?.isAdmin:", auth?.isAdmin)
+        console.log("🚀 ~ file: EditForm.jsx:56 ~ getForm ~ auth?.userId:", auth?.userId)
+        console.log("🚀 ~ file: EditForm.jsx:56 ~ getForm ~ res.data.createdByUserId:", res.data.createdByUserId)
+        console.log(res.data.createdByUserId === auth?.userId)
+        if (!(res.data.createdByUserId === auth?.userId || auth?.isAdmin)) {
           navigate('/')
         }
         

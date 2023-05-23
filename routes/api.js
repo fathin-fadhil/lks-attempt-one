@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addForm, getFormsDetails } from "../controllers/formsController.js";
+import { addForm, getFormsDetails, getFormById, updateForm } from "../controllers/formsController.js";
 import { isAuthenticated } from "../middleware/checkAuthentication.js";
 
 const router = Router()
@@ -47,6 +47,43 @@ router.post('/forms', isAuthenticated, async (req, res) => {
         res.sendStatus(201)
     } catch (error) {
         console.log("🚀 ~ file: api.js:49 ~ router.post ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.put('/forms/:id', isAuthenticated, async (req, res) => {
+    const formId = Number(req.params.id)
+
+    const { isAnonymous, formTitle, formDescription, formQuestions, formColor } = req.body
+
+    if (isAnonymous === undefined ||  !formTitle  || !formDescription || !formQuestions || formQuestions === [] || !formColor) return res.sendStatus(400)
+
+    try {
+        await updateForm({
+            isAnonymous, formTitle, formDescription, formQuestions, formColor
+        }, formId)
+
+        res.sendStatus(200)
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:68 ~ router.put ~ error:", error)
+        res.sendStatus(500)
+    }
+
+    
+})
+
+router.get('/forms/:id', async (req, res) => {
+    const formId = Number(req.params.id)
+
+    if(!formId) return res.sendStatus(400)
+
+    try {
+        const form = await getFormById(formId)
+        if(!form) return res.sendStatus(404)
+
+        res.json(form)
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:65 ~ router.get ~ error:", error)
         res.sendStatus(500)
     }
 })
