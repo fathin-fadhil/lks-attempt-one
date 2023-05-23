@@ -9,9 +9,9 @@ function Signout() {
 
     useEffect(() => {
         const signout = async () => {
-            axios.post('/logout', {email: auth?.userEmail}, { withCredentials: true })
-            setAuth({})
-            navigate('/')
+          setAuth({ accessToken: '', userEmail: ''})
+          await axios.post('/logout', {email: auth?.userEmail}, { withCredentials: true })
+          navigate('/')
         }
 
         signout()

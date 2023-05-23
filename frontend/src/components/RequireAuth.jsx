@@ -12,7 +12,7 @@ function RequireAuth({requireAdmin}) {
         : <Navigate to="/" state={{from: location}} replace />
       : auth?.accessToken
         ? <Outlet />
-        : <Navigate to="/login" state={{from: location}} replace />
+        : <Navigate to="/auth" state={{from: location}} replace />
   )
 }
 

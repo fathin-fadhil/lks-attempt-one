@@ -8,11 +8,11 @@ const AnswersModel = db.define('answers', {
     },
     userEmail: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }, 
     userName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 })
 

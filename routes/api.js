@@ -112,7 +112,6 @@ router.post('/forms/answers/anonymous', async (req, res) => {
     try {
         await addAnswer(answersArray, formId, null, null, null)
         res.sendStatus(201)
-        await add
     } catch (error) {
         console.log("🚀 ~ file: api.js:72 ~ error:", error)
         res.sendStatus(500)
