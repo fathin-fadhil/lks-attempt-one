@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { addForm, getFormsDetails, getFormById, updateForm } from "../controllers/formsController.js";
 import { isAuthenticated } from "../middleware/checkAuthentication.js";
+import { addAnswer } from "../controllers/answersController.js";
 
 const router = Router()
 
@@ -84,6 +85,36 @@ router.get('/forms/:id', async (req, res) => {
         res.json(form)
     } catch (error) {
         console.log("🚀 ~ file: api.js:65 ~ router.get ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.post('/forms/answers', isAuthenticated, async (req, res) => {
+    const { formId, answersArray } = req.body
+    if (!formId || !answersArray) return res.sendStatus(400)
+
+    const userId = req.userId
+    const userName = req.userName
+    const userEmail = req.email    
+
+    try {
+        await addAnswer(answersArray, formId, userId, userEmail, userName )
+        res.sendStatus(201)
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:72 ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.post('/forms/answers/anonymous', async (req, res) => {
+    const { formId, answersArray } = req.body
+    if (!formId || !answersArray) return res.sendStatus(400)
+    try {
+        await addAnswer(answersArray, formId, null, null, null)
+        res.sendStatus(201)
+        await add
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:72 ~ error:", error)
         res.sendStatus(500)
     }
 })

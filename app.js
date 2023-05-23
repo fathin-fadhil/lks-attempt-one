@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import db from './config/database.js'
 import usersModel from './models/usersModel.js'
 import FormsModel from './models/formsModel.js'
+import AnswersModel from './models/answersModel.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -20,6 +21,7 @@ try {
     await db.authenticate();
     await usersModel.sync()
     await FormsModel.sync()
+    await AnswersModel.sync()
     console.log('Database connected...');
 } catch (error) {
     console.log("🚀 ~ file: app.js:19 ~ error:", error)    

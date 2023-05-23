@@ -3,13 +3,14 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import useAuth from "../hooks/useAuth"
 import { useEffect, useState } from "react"
-import { Button, Card, CardBody, CardFooter, Tooltip, Typography, Dialog, DialogBody, Spinner } from "@material-tailwind/react"
+import { Button, Card, CardBody, CardFooter, Tooltip, Typography, Dialog, DialogBody, Spinner, Navbar } from "@material-tailwind/react"
 import { TrashIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { TbAsteriskSimple } from "react-icons/tb";
 import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion"
 import CheckboxQuestion from "../components/CheckboxQuestion"
 import TextInputQuestion from "../components/TextInputQuestion"
 import axios from "axios"
+import NavbarComp from "../components/NavbarComp"
 
 function Form() {
   const { formId } = useParams()
@@ -130,88 +131,92 @@ function Form() {
   }
 
   return (
-    <div className={`bg-${formData.formColor}-50 w-full flex flex-col  h-fit min-h-full`}>
-      <div className={`bg-${formData.formColor}-50  flex flex-col items-center gap-3 p-4`} ref={parent}>
-        <Card shadow={false} className={` shadow-md w-full max-w-5xl border-t-4 border-${formData.formColor}-500`}>
-          <CardBody>
-            <Typography variant="h1" >{formData.formTitle}</Typography>
-            <Typography variant="p" className=" mb-3 text-black">{formData.formDescription}</Typography>
-            <Typography variant="p">Dibuat oleh : {formData.createdByUserName}</Typography>
-            {              
-              auth?.isAdmin || formData.createdbyUserId === auth?.userId ?
-              <div className=" mt-4 flex gap-3">
-                <Button onClick={() => {navigate(`/form/${formId}/edit`)}} variant="outlined" size="sm" color={formData.formColor}>Edit Form</Button>
-                <Button onClick={() => {navigate(`/form/${formId}/result`)}} variant="outlined" size="sm" color={formData.formColor}>Lihat Hasil</Button>
-                <Button onClick={() => {setIsWarn(true);setIsDeleteWarning(true); setDialogOpen(true); setDialogMessage('Apakah anda yakin ingin menghapus form ini?')}} variant="text" color="red" size="sm" className=" inline-flex gap-1 align-middle text-center text-red-900 ml-auto" >
-                  <TrashIcon className=" h-4 w-4" />  Delete
-                </Button>
-              </div>
-              : null
-            }
-          </CardBody>
-          <CardFooter className=" border-t-2 p-4">
-            {
-              !formData.isAnonymous
-              ? <Typography className={`${!auth.accessToken ? 'text-red-500' :  'text-black'} `}>{`${!auth.accessToken ? 'Anda perlu login untuk mengisi kuis ini': 'Email anda akan direkam saat mengisi kuis ini'}`}</Typography>
-              : <Typography>Email tidak akan direkam saat mengisi kuis ini</Typography>
-            }
-          </CardFooter>
-        </Card>
+    <>
+      <NavbarComp />
 
-        {formQuestions.map((formQuestion, index) => (
-              <Card key={index} shadow={false} className=" shadow-md w-full max-w-5xl ">
-                {
-                  formQuestion.required && (
-                    <Tooltip content="Pertanyaan ini harus diisi" placement="bottom">
-                      <div>
-                        <TbAsteriskSimple className=" absolute top-4 right-4 text-red-700"></TbAsteriskSimple>
-                      </div>
-                    </Tooltip>)
-                }
-                <CardBody>
-                  { formQuestion.type === 'multipleChoice'
-                    ? <MultipleChoiceQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></MultipleChoiceQuestion>
-                    : formQuestion.type === 'checkbox'
-                      ? <CheckboxQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></CheckboxQuestion>
-                      :  formQuestion.type === 'textInput'
-                        ? <TextInputQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></TextInputQuestion>
-                        : null
+      <div className={`bg-${formData.formColor}-50 w-full flex flex-col  h-fit min-h-full`}>
+        <div className={`bg-${formData.formColor}-50  flex flex-col items-center gap-3 p-4`} ref={parent}>
+          <Card shadow={false} className={` shadow-md w-full max-w-5xl border-t-4 border-${formData.formColor}-500`}>
+            <CardBody>
+              <Typography variant="h1" >{formData.formTitle}</Typography>
+              <Typography variant="p" className=" mb-3 text-black">{formData.formDescription}</Typography>
+              <Typography variant="p">Dibuat oleh : {formData.createdByUserName}</Typography>
+              {              
+                auth?.isAdmin || formData.createdbyUserId === auth?.userId ?
+                <div className=" mt-4 flex gap-3">
+                  <Button onClick={() => {navigate(`/form/${formId}/edit`)}} variant="outlined" size="sm" color={formData.formColor}>Edit Form</Button>
+                  <Button onClick={() => {navigate(`/form/${formId}/result`)}} variant="outlined" size="sm" color={formData.formColor}>Lihat Hasil</Button>
+                  <Button onClick={() => {setIsWarn(true);setIsDeleteWarning(true); setDialogOpen(true); setDialogMessage('Apakah anda yakin ingin menghapus form ini?')}} variant="text" color="red" size="sm" className=" inline-flex gap-1 align-middle text-center text-red-900 ml-auto" >
+                    <TrashIcon className=" h-4 w-4" />  Delete
+                  </Button>
+                </div>
+                : null
+              }
+            </CardBody>
+            <CardFooter className=" border-t-2 p-4">
+              {
+                !formData.isAnonymous
+                ? <Typography className={`${!auth.accessToken ? 'text-red-500' :  'text-black'} `}>{`${!auth.accessToken ? 'Anda perlu login untuk mengisi kuis ini': 'Email anda akan direkam saat mengisi kuis ini'}`}</Typography>
+                : <Typography>Email tidak akan direkam saat mengisi kuis ini</Typography>
+              }
+            </CardFooter>
+          </Card>
+
+          {formQuestions.map((formQuestion, index) => (
+                <Card key={index} shadow={false} className=" shadow-md w-full max-w-5xl ">
+                  {
+                    formQuestion.required && (
+                      <Tooltip content="Pertanyaan ini harus diisi" placement="bottom">
+                        <div>
+                          <TbAsteriskSimple className=" absolute top-4 right-4 text-red-700"></TbAsteriskSimple>
+                        </div>
+                      </Tooltip>)
                   }
-                </CardBody>
-              </Card>
-        ))
-        }
+                  <CardBody>
+                    { formQuestion.type === 'multipleChoice'
+                      ? <MultipleChoiceQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></MultipleChoiceQuestion>
+                      : formQuestion.type === 'checkbox'
+                        ? <CheckboxQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></CheckboxQuestion>
+                        :  formQuestion.type === 'textInput'
+                          ? <TextInputQuestion color={formData.formColor} handleAnswer={handleAnswer} index={index} question={formQuestion} ></TextInputQuestion>
+                          : null
+                    }
+                  </CardBody>
+                </Card>
+          ))
+          }
 
-        <Dialog open={dialogOpen} className="w-full max-w-lg md:max-w-2xl -m-4">
-          <DialogBody className=" flex flex-col items-center gap-3">
-            {isLoading && <Spinner className=" w-14 h-14" />}
+          <Dialog open={dialogOpen} className="w-full max-w-lg md:max-w-2xl -m-4">
+            <DialogBody className=" flex flex-col items-center gap-3">
+              {isLoading && <Spinner className=" w-14 h-14" />}
 
-            {isSuccess &&<CheckCircleIcon className=" text-green-500 w-14 h-14" />}
-            {isWarn && <ExclamationTriangleIcon className=" text-red-500 w-14 h-14" />}
-            <Typography className=" text-blue-gray-900">{dialogMessage}</Typography>
+              {isSuccess &&<CheckCircleIcon className=" text-green-500 w-14 h-14" />}
+              {isWarn && <ExclamationTriangleIcon className=" text-red-500 w-14 h-14" />}
+              <Typography className=" text-blue-gray-900">{dialogMessage}</Typography>
 
-            {!isLoading && !isDeleteWarning &&
-              <Button onClick={()=> {if(isSuccess){navigate('/')} if(isWarn){setDialogOpen(false)}}}>OK</Button>          
-            }
-            {
-              isDeleteWarning && 
-              <div className=" flex flex-row gap-4">
-                <Button onClick={()=> {setDialogOpen(false); setDialogMessage(''); setIsDeleteWarning(false)}} color={formData.formColor} variant="outlined" size="sm">Cancel</Button>
-                <Button onClick={() => {setIsWarn(null); handleDeleteForm()}} color='red'>Hapus</Button>
-              </div>
-            }
-          </DialogBody>      
-        </Dialog>
+              {!isLoading && !isDeleteWarning &&
+                <Button onClick={()=> {if(isSuccess){navigate('/')} if(isWarn){setDialogOpen(false)}}}>OK</Button>          
+              }
+              {
+                isDeleteWarning && 
+                <div className=" flex flex-row gap-4">
+                  <Button onClick={()=> {setDialogOpen(false); setDialogMessage(''); setIsDeleteWarning(false)}} color={formData.formColor} variant="outlined" size="sm">Cancel</Button>
+                  <Button onClick={() => {setIsWarn(null); handleDeleteForm()}} color='red'>Hapus</Button>
+                </div>
+              }
+            </DialogBody>      
+          </Dialog>
 
-        <div className=" w-full max-w-5xl flex flex-row justify-end gap-4">
-          <Button size="sm" variant="outlined" color={formData.formColor} onClick={() => navigate('/')}>Cancel</Button>
-          <Button size="sm" color={formData.formColor} onClick={handleSubmit} className=" right-0">Submit</Button>
+          <div className=" w-full max-w-5xl flex flex-row justify-end gap-4">
+            <Button size="sm" variant="outlined" color={formData.formColor} onClick={() => navigate('/')}>Cancel</Button>
+            <Button size="sm" color={formData.formColor} onClick={handleSubmit} className=" right-0">Submit</Button>
+          </div>
+
+          <Button onClick={() => {console.log([...answer.values()])}} className=" max-w-md text-center">print ansaawfawf</Button>
         </div>
-
-        <Button onClick={() => {console.log(answer)}} className=" max-w-md text-center">print ans</Button>
+        {/* <div className=" hidden bg-red-50 bg-purple-50 bg-indigo-50 bg-green-50 bg-pink-50 bg-teal-50"></div> */}
       </div>
-      {/* <div className=" hidden bg-red-50 bg-purple-50 bg-indigo-50 bg-green-50 bg-pink-50 bg-teal-50"></div> */}
-    </div>
+    </>
   )
 }
 
