@@ -2,6 +2,7 @@ import { Router } from "express";
 import { addForm, getFormsDetails, getFormById, updateForm, deleteForm, getFormDataByUserId } from "../controllers/formsController.js";
 import { isAuthenticated } from "../middleware/checkAuthentication.js";
 import { addAnswer, getAnswersByFormId, deleteAnswerWithFormId } from "../controllers/answersController.js";
+import { getuserById } from "../controllers/usersController.js";
 
 const router = Router()
 
@@ -240,8 +241,8 @@ router.delete('/forms/:id', isAuthenticated, async (req, res) => {
     const userInfo = await getuserById(userId)
 
     if (!formToBeDeleted) return res.sendStatus(404)
-    if (formToBeDeleted.createdByUserId !== userId) {
-        if (!userInfo.is_admin) {
+    if (!userInfo.is_admin) {
+        if (formToBeDeleted.createdByUserId !== userId) {
             return res.sendStatus(403)            
         }
     }
