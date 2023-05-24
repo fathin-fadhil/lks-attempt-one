@@ -3,7 +3,6 @@ import { useState } from "react"
 
 
 function MultipleChoiceQuestion({index , question, handleAnswer, color}) {
-  console.log("🚀 ~ file: MultipleChoiceQuestion.jsx:6 ~ MultipleChoiceQuestion ~ question:", question)
   const questionIndex = index
 
   const [selectedChoice, setSelectedChoice] = useState('');
@@ -15,7 +14,7 @@ function MultipleChoiceQuestion({index , question, handleAnswer, color}) {
 
   const clearChoice = () => {
     setSelectedChoice('')
-    handleAnswer(questionIndex. null)
+    handleAnswer(questionIndex, null)
   }
 
   return (

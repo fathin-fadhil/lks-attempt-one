@@ -20,12 +20,16 @@ function CheckboxQuestion({index, question, handleAnswer, color}) {
     })
     setSelectedChoice(newAnswer)
 
-    handleAnswer(questionIndex, {questionId: question.questionId, answerArray: [...answerArrayObject]})
+    if (newAnswer.includes(true)) {
+      handleAnswer(questionIndex, {questionId: question.questionId, answerArray: [...answerArrayObject]})      
+    } else {
+      handleAnswer(questionIndex, null)    
+    }
   }
 
   const clearChoice = () => {
-    setSelectedChoice(new Array(question.choices.length).fill(false));
     handleAnswer(questionIndex, null)
+    setSelectedChoice(new Array(question.choices.length).fill(false));
   }
 
   return (

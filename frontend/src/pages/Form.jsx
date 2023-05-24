@@ -91,9 +91,11 @@ function Form() {
     const answersArray = [...answer.values()]
     let indexOfQuestionThatAreRequired = null
     formQuestions.every((question, index) => {
-      if (question.required && !answersArray[index]) {
-        indexOfQuestionThatAreRequired = index
-        return false
+      if (question.required) {
+        if (!answersArray[index] || !answersArray[index]?.answer === '') {
+          indexOfQuestionThatAreRequired = index
+          return false          
+        }
       }
       return true
     })

@@ -10,7 +10,12 @@ function TextInputQuestion({index, question, handleAnswer, color}) {
 
   const handleChange = (e) => {
     setAnswerText(e.target.value)
-    handleAnswer(questionIndex, {questionId: question.questionId, answer: e.target.value})
+    
+    if (e.target.value.length > 0) {
+      handleAnswer(questionIndex, {questionId: question.questionId, answer: e.target.value})
+    } else {
+      handleAnswer(questionIndex, null)    
+    }
   }
 
   const clearAnswer = () => {
