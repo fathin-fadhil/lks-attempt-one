@@ -81,11 +81,13 @@ export default function NavbarComp() {
       <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 ">
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
-            as="a"
-            href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
+            as="p"
+            onClick={() => navigate('/')}
+            className="mr-4 cursor-pointer py-1.5 font-extrabold text-xl"
+            textGradient
+            color={'blue'}
           >
-            Material Tailwind
+            WebQuestionnaire
           </Typography>
 
           <div className="flex items-center gap-4">

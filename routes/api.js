@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addForm, getFormsDetails, getFormById, updateForm, deleteForm, getFormDataByUserId } from "../controllers/formsController.js";
+import { addForm, getFormsDetails, getFormById, updateForm, deleteForm, getFormDataByUserId, getFormsBetweenDates } from "../controllers/formsController.js";
 import { isAuthenticated } from "../middleware/checkAuthentication.js";
 import { addAnswer, getAnswersByFormId, deleteAnswerWithFormId } from "../controllers/answersController.js";
 import { getuserById } from "../controllers/usersController.js";
@@ -269,4 +269,83 @@ router.get('/userforms', isAuthenticated,  async (req, res) => {
     }
 })
 
+router.get('/summary/forms', async (req, res) => {
+    const {startDate, endDate} = req.query
+
+    try {
+        const unparsedForms = await getFormsBetweenDates(new Date(startDate), new Date(endDate))
+        const newForm = { formsArray: [...unparsedForms]}
+        const stringForms = JSON.stringify(newForm)
+        const obj = JSON.parse(stringForms)
+        const forms = obj.formsArray
+
+        const formsByDate = forms.reduce((acc, form) => {
+            const createdAtDate = form.createdAt.split('T')[0];
+            if (!acc[createdAtDate]) {
+              acc[createdAtDate] = [];
+            }
+            acc[createdAtDate].push(form);
+            return acc;
+          }, {});
+          
+          // Grouping by 'createdByUserName' on each date
+          const formsByDateAndUser = {};
+          for (const date in formsByDate) {
+            const formsOnDate = formsByDate[date];
+            formsByDateAndUser[date] = formsOnDate.reduce((acc, form) => {
+              const createdByUserName = form.createdByUserName;
+              if (!acc[createdByUserName]) {
+                acc[createdByUserName] = [];
+              }
+              acc[createdByUserName].push(form);
+              return acc;
+            }, {});
+          }
+
+          const formData = formatForms(forms)
+          const usernames = extractUsernames(forms)
+        
+        res.json({formsByDateAndUser, formData, usernames})
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:279 ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
 export default router
+
+// utility func
+
+function formatForms(forms) {
+    const formattedData = {};
+  
+    forms.forEach(form => {
+      const { createdByUserName, createdAt } = form;
+  
+      if (!formattedData[createdByUserName]) {
+        formattedData[createdByUserName] = {};
+      }
+  
+      const date = new Date(createdAt);
+      const formattedDate = date.toISOString().split('T')[0];
+      
+      if (!formattedData[createdByUserName][formattedDate]) {
+        formattedData[createdByUserName][formattedDate] = 1;
+      } else {
+        formattedData[createdByUserName][formattedDate]++;
+      }
+    });
+  
+    return formattedData;
+  }
+
+  function extractUsernames(forms) {
+    const usernames = new Set();
+  
+    forms.forEach(form => {
+      const { createdByUserName } = form;
+      usernames.add(createdByUserName);
+    });
+  
+    return Array.from(usernames);
+  }

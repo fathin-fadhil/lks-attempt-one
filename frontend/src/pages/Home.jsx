@@ -61,7 +61,7 @@ function Home() {
   
 
   return (
-    <>
+    <div className=" h-fit min-h-full">
       <NavbarComp />
 
       <div className=" flex flex-col h-full items-center bg-blue-gray-50">
@@ -140,7 +140,7 @@ function Home() {
             </div>
           </Card>
       </div>
-    </>
+    </div>
   )
 }
 

@@ -121,3 +121,22 @@ export async function deleteFormByUserId(userId) {
         }
     })
 }
+
+export async function getFormsBetweenDates(startDate, endDate) {
+    const rawFormsData = await FormsModel.findAll({
+        where: {
+            createdAt: {
+                [Op.between]: [startDate, endDate]
+            }
+        },
+        attributes: {
+            exclude: ['formQuestions']
+        },
+        order: [
+            ['createdAt', 'DESC']
+        ]
+    });
+    //const forms = formsData.map( form => form.dataValues)
+    return rawFormsData.map(form => form.dataValues)
+} 
+    
