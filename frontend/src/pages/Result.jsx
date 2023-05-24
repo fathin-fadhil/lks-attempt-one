@@ -23,7 +23,7 @@ function Result() {
   const [parent] = useAutoAnimate({duration: 500})
   const colors = useColors()
 
-  const [formData, setFormData] = useState({isAnonymous: false, formTitle: 'Loading...', formDescription: '', formColor: 'blue', createdbyUserId: -1, answeredBy: []})
+  const [formData, setFormData] = useState({isAnonymous: false, formTitle: 'Loading...', formDescription: '', formColor: 'blue', createdbyUserId: -1, answeredBy: [], createdAt: ''})
   const [formQuestions, setFormQuestions] = useState([])
   const [openAccordion, setOpenAccordion] = useState(false)
 
@@ -39,7 +39,8 @@ function Result() {
           isAnonymous: res.data.isAnonymous ? res.data.isAnonymous : false,
           answeredBy: res.data.answeredBy,
           createdbyUserId: res.data.createdbyUserId,
-          createdByUserName: res.data.createdByUserName
+          createdByUserName: res.data.createdByUserName,
+          createdAt: res.data.createdAt
         })
         setFormQuestions(res.data.questionAndTheChoicesWithWhoAnsweredIt)        
       } catch (error) {
@@ -61,6 +62,7 @@ function Result() {
             <Typography variant="h1" >{formData.formTitle}</Typography>
             <Typography variant="p" className=" mb-3 text-black">{formData.formDescription}</Typography>
             <Typography variant="p">Dibuat oleh : {formData.createdByUserName}</Typography>
+            <Typography variant="p">Dibuka sejak : {(new Date(formData.createdAt)).toLocaleString()}</Typography>
           </CardBody>
           <CardFooter className=" border-t-2 p-4">
               {

@@ -20,7 +20,7 @@ function Form() {
   const [parent] = useAutoAnimate()
   const { auth } = useAuth()
 
-  const [formData, setFormData] = useState({isAnonymous: false, formTitle: 'Loading...', formDescription: '', formColor: 'blue', createdbyUserId: -1, createdByUserEmail: '', createdByUserName: ''})
+  const [formData, setFormData] = useState({isAnonymous: false, formTitle: 'Loading...', formDescription: '', formColor: 'blue', createdbyUserId: -1, createdByUserEmail: '', createdByUserName: '', createdAt: ''})
   const [formQuestions, setFormQuestions] = useState([])
   const [answer, setAnswer] = useState(new Map())
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -43,7 +43,8 @@ function Form() {
           isAnonymous: res.data.isAnonymous,
           createdbyUserId: res.data.createdByUserId,
           createdByUserEmail: res.data.createdByUserEmail,
-          createdByUserName: res.data.createdByUserName
+          createdByUserName: res.data.createdByUserName,
+          createdAt: res.data.createdAt
         })        
 
         setFormQuestions(res.data.formQuestions)
@@ -145,6 +146,7 @@ function Form() {
               <Typography variant="h1" >{formData.formTitle}</Typography>
               <Typography variant="p" className=" mb-3 text-black">{formData.formDescription}</Typography>
               <Typography variant="p">Dibuat oleh : {formData.createdByUserName}</Typography>
+              <Typography variant="p">Dibuka sejak : {(new Date(formData.createdAt)).toLocaleString()}</Typography>
               {              
                 auth?.isAdmin || formData.createdbyUserId === auth?.userId ?
                 <div className=" mt-4 flex gap-3">
