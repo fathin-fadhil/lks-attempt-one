@@ -58,6 +58,10 @@ function Home() {
   const createNewForm = () => {
     navigate('/form/new')
   }
+
+  useEffect(() => {
+    console.log('home home render')
+  }, [])
   
 
   return (

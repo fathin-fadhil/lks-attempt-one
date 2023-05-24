@@ -15,7 +15,7 @@ function RegisterComp() {
   const handleRegister = async (e) => {
     e.preventDefault()
     if (!checkbox) {
-      setMessage('You need to agree to our Terms and Conditions')
+      return setMessage('You need to agree to our Terms and Conditions')
     }
 
     try {
