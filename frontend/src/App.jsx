@@ -8,6 +8,7 @@ import Result from "./pages/Result"
 import EditForm from "./pages/EditForm"
 import Form from "./pages/Form"
 import MyForm from './pages/MyForm';
+import Admin from "./pages/Admin"
 
 function App() {
 
@@ -28,6 +29,10 @@ function App() {
             <Route path="/form/:formId/result" element={<Result />} />
             <Route path="/myform" element={<MyForm /> } />
           </Route>            
+
+          <Route element={<RequireAuth requireAdmin={true} />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
 
         </Route>        
       </Routes>
