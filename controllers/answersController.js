@@ -58,3 +58,11 @@ export  async function deleteAnswerWithFormId(formId) {
     })
 
 }
+
+export async function deleteAnswerWithUserId(userId) {
+    await AnswerModel.destroy({
+        where: {
+            userId: userId
+        }
+    })
+}

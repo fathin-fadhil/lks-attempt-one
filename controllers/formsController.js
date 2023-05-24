@@ -113,3 +113,11 @@ export async function getFormDataByUserId(userId) {
     const forms = await formData.map(form => form.dataValues)
     return forms;
 }
+
+export async function deleteFormByUserId(userId) {
+    await FormsModel.destroy({
+        where:{
+            userId
+        }
+    })
+}

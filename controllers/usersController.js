@@ -70,3 +70,35 @@ export async function deleteRefreshToken (email) {
         }
     })
 }
+
+export async function getUsers() {
+    const users = await UserModel.findAll({
+        attributes: {
+            exclude: ['password', 'refresh_token']
+        }
+    })
+    
+    if (!users) {
+        return null
+    }
+
+    return users.map(user => user['dataValues'])    
+}
+
+export async function updateUser(userDetails, userId) {
+    await UserModel.update({
+        ...userDetails
+    },{
+        where: {
+            id: userId        
+        }
+    })
+}
+
+export async function deleteUser(userId) {
+    await UserModel.destroy({
+        where: {
+            id: userId
+        }
+    })
+}

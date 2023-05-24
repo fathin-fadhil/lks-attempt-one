@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { setUser, getUserByEmail, updateRefreshToken, getUserByRefreshToken, deleteRefreshToken } from "../controllers/usersController.js";
+import { setUser, getUserByEmail, updateRefreshToken, getUserByRefreshToken, deleteRefreshToken, getUsers, updateUser, deleteUser } from "../controllers/usersController.js";
+import { isAuthenticated, isAdmin } from '../middleware/checkAuthentication.js'
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import { deleteAnswerWithFormId, deleteAnswerWithUserId, getAnswersByFormId } from "../controllers/answersController.js";
+import { deleteFormByUserId, getFormDataByUserId } from "../controllers/formsController.js";
 dotenv.config()
 
 const router = Router();
@@ -98,6 +101,71 @@ router.post('/logout', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error' })
     }
+})
+
+router.get('/users', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+        const users = await getUsers()
+        res.json({usersArray: users})
+    } catch (error) {
+        console.log("🚀 ~ file: auth.js:109 ~ router.get ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.put('/users', isAuthenticated, isAdmin, async (req, res) => {
+    const { name, is_admin, id } = req.body
+
+    try {
+        await updateUser({name, is_admin}, id)
+        res.sendStatus(200)    
+    } catch (error) {
+        console.log("🚀 ~ file: auth.js:121 ~ router.put ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.delete('/users/:userId', isAuthenticated, isAdmin, async (req, res) => {
+    const userId = Number(req.params.userId)
+
+    try {
+        await deleteAnswerWithUserId(userId)
+
+        const usersForm = await getFormDataByUserId(userId)
+        usersForm.map(async (form) => {
+            await deleteAnswerWithFormId(form.id)            
+        })
+
+        await deleteFormByUserId(userId)
+        await deleteUser(userId)
+
+        res.sendStatus(200)    
+    } catch (error) {
+        console.log("error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.post('/users', isAuthenticated, isAdmin, async (req, res) => {
+    const { name, email, password, is_admin } = req.body
+
+    if (!name || !email || !password) return res.status(400).json({ message: 'Field tidak boleh kosong' })
+
+    try {
+        const getUser = await getUserByEmail(email)
+        if (getUser) return res.status(400).json({ message: 'Email sudah terdaftar' })
+
+        const salt = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        // create user
+        await setUser(name, email, hashedPassword, is_admin)
+        res.status(201).json({ message: 'Berhasil daftar' })
+    } catch (error) {
+        console.log("🚀 ~ file: auth.js:165 ~ router.post ~ error:", error)
+        res.sendStatus(500)
+    }
+
 })
 
 export default router
