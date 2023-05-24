@@ -95,3 +95,21 @@ export async function deleteForm(formIdToBeDeleted) {
         }
     })
 }
+
+export async function getFormDataByUserId(userId) {
+    const formData = await FormsModel.findAll({
+        where: {
+            userId
+        },
+        attributes: {
+            exclude: ['formQuestions']        
+        }
+    });
+
+    if (!formData) {
+        return null
+    }        
+
+    const forms = await formData.map(form => form.dataValues)
+    return forms;
+}

@@ -13,11 +13,7 @@ import {
   } from "@material-tailwind/react";
 
   import {
-    UserCircleIcon,
     ChevronDownIcon,
-    Cog6ToothIcon,
-    InboxArrowDownIcon,
-    LifebuoyIcon,
     PowerIcon,
     UserGroupIcon,
     DocumentChartBarIcon
@@ -61,7 +57,7 @@ export default function NavbarComp() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" onClick={() => {navigate('/')}} className="flex items-center">
+        <a href="" onClick={() => {navigate('/')}} className="flex items-center cursor-pointer" tabIndex="0">
           Home
         </a>
       </Typography>
@@ -72,8 +68,8 @@ export default function NavbarComp() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" onClick={() => {navigate('/')}} className="flex items-center">
-          Dashboard
+        <a href="" onClick={() => {navigate('/myform')}} className="flex items-center cursor-pointer" tabIndex="0">
+          Kuesionerku
         </a>
       </Typography>
       
@@ -99,6 +95,7 @@ export default function NavbarComp() {
               variant="gradient"
               size="sm"
               className="hidden lg:inline-block"
+              onClick={() => navigate('/form/new')}
             >
               <span>Buat kuis</span>
             </Button>
@@ -148,7 +145,7 @@ export default function NavbarComp() {
         </div>
         <Collapse open={openNav}>
           {navList}
-          <Button variant="gradient" size="sm" fullWidth className="mb-2">
+          <Button variant="gradient" size="sm" fullWidth className="mb-2" onClick={() => navigate('/form/new')}>
             <span>Buat Kuis</span>
           </Button>
         </Collapse>
@@ -166,10 +163,6 @@ function ProfileMenu() {
     const [greetings, setGreetings] = useState('Hello,');
     const [userName, setUserName] = useState('')
 
-    const goToAdminPage = () => {
-      navigate('/admin')
-    }
-
     useEffect(() => {
       var curHr = new Date().getHours()
       if (curHr < 12) {
@@ -186,9 +179,9 @@ function ProfileMenu() {
 
     const profileMenuItems = [
         {
-          label: "Kuesioner Ku",
+          label: "Kuesionerku",
           icon: DocumentChartBarIcon,
-          link:'/userprofile'
+          link:'/myform'
         },        
         {
           label: "Sign Out",
@@ -201,7 +194,7 @@ function ProfileMenu() {
         profileMenuItems.splice(profileMenuItems.length - 1, 0, {
           label: 'Admin Page',
           icon: UserGroupIcon ,
-          onclick: goToAdminPage
+          link: '/admin'
         })
       }
    

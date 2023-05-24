@@ -7,6 +7,7 @@ import RequireAuth from "./components/RequireAuth"
 import Result from "./pages/Result"
 import EditForm from "./pages/EditForm"
 import Form from "./pages/Form"
+import MyForm from './pages/MyForm';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/form/new" element={<EditForm newForm={true} />} />
             <Route path="/form/:formId/edit" element={<EditForm newForm={false} />} />
             <Route path="/form/:formId/result" element={<Result />} />
+            <Route path="/myform" element={<MyForm /> } />
           </Route>            
 
         </Route>        

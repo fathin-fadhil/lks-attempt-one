@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { addForm, getFormsDetails, getFormById, updateForm } from "../controllers/formsController.js";
+import { addForm, getFormsDetails, getFormById, updateForm, deleteForm, getFormDataByUserId } from "../controllers/formsController.js";
 import { isAuthenticated } from "../middleware/checkAuthentication.js";
-import { addAnswer, getAnswersByFormId } from "../controllers/answersController.js";
+import { addAnswer, getAnswersByFormId, deleteAnswerWithFormId } from "../controllers/answersController.js";
 
 const router = Router()
 
@@ -228,6 +228,43 @@ router.get('/forms/answers/:id', async (req, res) => {
     } catch (error) {
         console.log("🚀 ~ file: api.js:136 ~ error:", error)
         res.sendStatus(500)    
+    }
+})
+
+router.delete('/forms/:id', isAuthenticated, async (req, res) => {
+    const formId = Number(req.params.id)
+
+    const userId = req.userId
+
+    const formToBeDeleted = await getFormById(formId)
+    const userInfo = await getuserById(userId)
+
+    if (!formToBeDeleted) return res.sendStatus(404)
+    if (formToBeDeleted.createdByUserId !== userId) {
+        if (!userInfo.is_admin) {
+            return res.sendStatus(403)            
+        }
+    }
+
+    try {
+        await deleteAnswerWithFormId(formId)
+        await deleteForm(formId)
+        res.sendStatus(200)
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:101 ~ router.delete ~ error:", error)
+        res.sendStatus(500)
+    }
+})
+
+router.get('/userforms', isAuthenticated,  async (req, res) => {
+    const userId =  Number(req.userId)
+
+    try {
+        const forms = await getFormDataByUserId(userId)
+        res.json({formsArray: forms})
+    } catch (error) {
+        console.log("🚀 ~ file: api.js:242 ~ router.get ~ error:", error)
+        res.sendStatus(500)
     }
 })
 
